@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Pretty_Garden";
+  src: url("../fuentes/Pretty_Garden.ttf") ;
+}
+
+.titulo{
+  color:white;
+  font-family: "Pretty_Garden";
+}
+
+.enlace {
+  text-decoration: none;
+}
+
+
+   
