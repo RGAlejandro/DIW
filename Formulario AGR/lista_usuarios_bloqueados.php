@@ -41,11 +41,53 @@
   </style>
 </head>
 <body>
+<!-- LISTA DESPEGABLE PARTE PHP-->  
 <?php
-  $conexion = mysqli_connect("localhost", "root", "", "usuario") or die("Problemas con la conexión");
-  $registros = mysqli_query($conexion, "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios WHERE Usuario_bloqueado='1'") or die("Problemas en el select:" . mysqli_error($conexion));
+// Inicializa la variable $registros
+$registros = null;
+
+// Establece la conexión a la base de datos
+$conexion = mysqli_connect("localhost", "root", "", "usuario") or die("Problemas con la conexión");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // El formulario se ha enviado, procesa la selección del filtro
+  // y ejecuta la consulta SQL adecuada
+  $filtro = $_POST['filtro'];
+
+  if ($filtro === "bloqueados") {
+    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios WHERE Usuario_bloqueado='1'";
+  } elseif ($filtro === "desbloqueados") {
+    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios WHERE Usuario_bloqueado='0'";
+  } else {
+    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios";
+  }
+
+  $result = mysqli_query($conexion, $query) or die("Problemas en el select:" . mysqli_error($conexion));
+
+  // Asigna $result a $registros solo si la consulta tuvo éxito
+  if ($result) {
+    $registros = $result;
+  }
+}
+
+// Consulta por defecto si no se ha enviado el formulario
+if ($registros === null) {
+  $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios";
+  $registros = mysqli_query($conexion, $query) or die("Problemas en el select:" . mysqli_error($conexion));
+}
 ?>
 
+<form method="POST" action="lista_usuarios_bloqueados.php">
+  <label for="filtro">Filtrar por:</label>
+  <select name="filtro" id="filtro">
+    <option value="todos">Todos</option>
+    <option value="bloqueados">Bloqueados</option>
+    <option value="desbloqueados">Desbloqueados</option>
+  </select>
+  <input type="text" name="valor_filtro" placeholder="Valor de filtro">
+  <input type="submit" value="Filtrar">
+</form>
+  
 <form method="POST" action="desbloquear_usuarios.php">
   <h1 style="text-align:center;">Lista de Alumnos</h1>
 
