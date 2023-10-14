@@ -111,7 +111,7 @@ if ($registros === null) {
           <td><?php echo $reg['Usuario_email']; ?></td>
           <td><?php echo $reg['Usuario_perfil']; ?></td>
           <!-- Agrega un campo oculto para cada ID de usuario -->
-          <td><input type="checkbox" name="usuarios_desbloquear[]" value="<?php echo $reg['Usuario_id']; ?>"></td> 
+          <td><input type="checkbox" name="usuarios_Estado[]" value="<?php echo $reg['Usuario_id']; ?>"></td> 
         </tr>
       <?php } ?>
     </tbody>
@@ -133,7 +133,7 @@ if ($registros === null) {
 </script>
 <script>
     function selectAll() {
-      var checkboxes = document.querySelectorAll('input[name="usuarios_desbloquear[]"]');
+      var checkboxes = document.querySelectorAll('input[name="usuarios_Estado[]"]');
       for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
