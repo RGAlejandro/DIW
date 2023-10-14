@@ -99,7 +99,7 @@ if ($registros === null) {
         <th>Fecha de Alta</th>
         <th>Correo</th>
         <th>Rol</th>
-        <th>Desbloquear</th>
+        <th>Accionar</th>
       </tr>
     </thead>
     <tbody>
