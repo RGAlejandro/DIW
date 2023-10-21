@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password1 = $_POST["password1"]; 
     $password2 = $_POST["password2"]; 
     $captchaInput = $_POST["captcha"]; // Captcha
+    $provincia = $_POST['provincia'];
 
     // Realiza las validaciones necesarias (puedes agregar más según tus requisitos)
     if (empty($nombre) || empty($email) || empty($password1) || empty($password2) || empty($captchaInput)) {
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "usuario";
+    $dbname = "usuarios";
 
 
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -84,9 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         // El correo electrónico no existe en la base de datos, procede con el registro
-        $sql_insert = "INSERT INTO usuarios (Usuario_nombre, Usuario_email, Usuario_clave, Usuario_bloqueado, Usuario_token_aleatorio, Usuario_fecha_alta, Usuario_fotografia, Usuario_perfil) 
+        $sql_insert = "INSERT INTO usuarios (Usuario_nombre, Usuario_email, Usuario_clave, Usuario_bloqueado, Usuario_token_aleatorio, Usuario_fecha_alta, Usuario_fotografia, Usuario_perfil, Usuario_provincia) 
               VALUES 
-              ('$nombre','$email','$hash_contraseña','$bloqueado','$token','$fechaAlta','$imagen_usuario','$perfil_Usuario')"
+              ('$nombre','$email','$hash_contraseña','$bloqueado','$token','$fechaAlta','$imagen_usuario','$perfil_Usuario','$provincia')"
               or die("Problemas en el select" . mysqli_error($conexion));
 
         if ($conn->query($sql_insert) === TRUE) {
