@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conexion = mysqli_connect("localhost", "root", "", "usuario") or die("Problemas con la conexión");
 
     $email = $_SESSION['email'];
-    $contraseña_actual = $_POST['contraseña-actual'];
+    $contraseña_actual1 = $_POST['contraseña-actual1'];
+    $contraseña_actual2 = $_POST['contraseña-actual2'];
     $contraseña_nueva = $_POST['contraseña-nueva'];
 
     // Consulta para obtener la contraseña actual hasheada del usuario
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $contraseña_hash = $fila['Usuario_clave'];
 
         // Verificar si la contraseña actual ingresada coincide con la almacenada en la base de datos
-        if (password_verify($contraseña_actual, $contraseña_hash)) {
+        if (password_verify($contraseña_actual1, $contraseña_hash) && password_verify($contraseña_actual2, $contraseña_hash)) {
             // Verificar si la nueva contraseña cumple con los requisitos (mínimo 6 caracteres)
             if (strlen($contraseña_nueva) >= 6) {
                 // Hashear la nueva contraseña

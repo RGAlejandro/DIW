@@ -178,9 +178,15 @@
     <form class="formulario" action="procesarContraseña.php" method="post">
                     
                     <div class="mb-3">
-                        <label for="contraseña-actual" class="form-label">Ingrese su contraseña actual:</label>
-                        <input type="password" class="form-control" id="contraseña-actual" name="contraseña-actual">
+                        <label for="contraseña-actual1" class="form-label">Ingrese su contraseña actual:</label>
+                        <input type="password" class="form-control" id="contraseña-actual1" name="contraseña-actual1" required>
                     </div>
+
+                    <div class="mb-3">
+                    <label for="contraseña-actual2" class="form-label">Ingrese su contraseña actual nuevamente:</label>
+                    <input type="password" class="form-control" id="contraseña-actual2" name="contraseña-actual2" required>
+                    </div>
+
                     <div class="mb-3">
                         <label for="contraseña-nueva" class="form-label">Ingrese su nueva contraseña</label>
                         <input type="password" class="form-control" id="contraseña-nueva" name="contraseña-nueva">

@@ -135,7 +135,10 @@
           $nombre = $row['Usuario_nombre'];
           $apellido1 = $row['Usuario_apellido1'];
           $apellido2 = $row['Usuario_apellido2'];
+          $idProvincia = $row['Usuario_provincia'];
   }
+  $consultaProvincias = mysqli_query($conexion, "SELECT idProvincia, Provincia FROM provincias")
+  or die("Problemas en el select de provincias: " . mysqli_error($conexion));
 ?>
     <header class="header">
         <div class="container">
@@ -188,6 +191,20 @@
                     <div class="mb-3">
                         <label for="apellido2" class="form-label">Segundo apellido:</label>
                         <input type="text" class="form-control" id="apellido2" name="apellido2" value="<?php echo $apellido2; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="provincia" class="form-label">Provincia:</label>
+                        <select class="form-control" id="provincia" name="provincia">
+                            <?php
+                            while ($rowProvincia = mysqli_fetch_assoc($consultaProvincias)) {
+                                $id = $rowProvincia['idProvincia'];
+                                $nombreProvincia = $rowProvincia['Provincia'];
+                                $selected = ($id == $idProvincia) ? 'selected' : '';
+
+                                echo "<option value='$id' $selected>$nombreProvincia</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <button class="btn btn-primary" type="submit">Guardar Cambios</button>
     </form>    

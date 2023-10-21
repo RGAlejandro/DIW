@@ -1,41 +1,4 @@
-<!-- <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header('Location: menu.php');
-    exit(); // Asegurarse de que el script se detenga después de redireccionar
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $conexion = mysqli_connect("localhost", "root", "", "usuario") or die("Problemas con la conexión");
-
-    // Obtener datos del formulario
-    $nombre = $_POST['nombre'];
-    $apellido1 = $_POST['apellido1'];
-    $apellido2 = $_POST['apellido2'];
-    $email = $_SESSION['email'];
-
-    // Actualizar los datos en la base de datos
-    $actualizar = mysqli_query($conexion, "UPDATE usuarios SET Usuario_nombre='$nombre', Usuario_apellido1='$apellido1', Usuario_apellido2='$apellido2' WHERE Usuario_email='$email'") or die("Problemas en la actualización: " . mysqli_error($conexion));
-
-    if ($actualizar) {
-        // La actualización fue exitosa
-        header('Location: editarPerfil.php?actu=1');
-    } else {
-        // Hubo un error en la actualización
-        header('Location: editarPerfil.php?actu=0');
-    }
-
-    mysqli_close($conexion);
-} else {
-    // Redirigir si el método de solicitud no es POST
-    header('Location: editarPerfil.php');
-}
-?>
-
- -->
-
- <?php
+<?php
 session_start();
 
 if (!isset($_SESSION['email'])) {
@@ -57,18 +20,20 @@ if (mysqli_num_rows($busqueda) != 0) {
     $nombre = $row['Usuario_nombre'];
     $apellido1 = $row['Usuario_apellido1'];
     $apellido2 = $row['Usuario_apellido2'];
+    $idProvincia = $row['Usuario_provincia'];
 }
 
 $nombreError = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nuevoNombre = $_POST["nombre"];
-    
+    $nuevaProvincia = $_POST["provincia"];
+
     if (empty($nuevoNombre)) {
         header('Location: menu.php');
     } else {
         // Aquí puedes realizar la actualización en la base de datos
-        $updateQuery = "UPDATE usuarios SET Usuario_nombre='$nombre', Usuario_apellido1='$apellido1', Usuario_apellido2='$apellido2' WHERE Usuario_email='$email'" or die("Problemas en la actualización: " . mysqli_error($conexion));
+        $updateQuery = "UPDATE usuarios SET Usuario_nombre='$nombre', Usuario_provincia='$nuevaProvincia', Usuario_apellido1='$apellido1', Usuario_apellido2='$apellido2' WHERE Usuario_email='$email'" or die("Problemas en la actualización: " . mysqli_error($conexion));
         
         if (mysqli_query($conexion, $updateQuery)) {
             // La actualización se realizó correctamente
@@ -79,5 +44,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+header('Location: editarPerfil.php');
 ?>
-
