@@ -66,7 +66,7 @@
 $servername = "localhost"; // Cambia esto por la dirección del servidor de tu base de datos
 $username = "root"; // Cambia esto por tu nombre de usuario de la base de datos
 $password = ""; // Cambia esto por tu contraseña de la base de datos
-$database = "usuarios"; // Cambia esto por el nombre de tu base de datos
+$database = "usuario"; // Cambia esto por el nombre de tu base de datos
 
 // Crear una conexión a la base de datos
 $conn = new mysqli($servername, $username, $password, $database);
