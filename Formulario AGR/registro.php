@@ -63,6 +63,24 @@
 </head>
 <body>
 <?php
+$servername = "localhost"; // Cambia esto por la dirección del servidor de tu base de datos
+$username = "root"; // Cambia esto por tu nombre de usuario de la base de datos
+$password = ""; // Cambia esto por tu contraseña de la base de datos
+$database = "usuarios"; // Cambia esto por el nombre de tu base de datos
+
+// Crear una conexión a la base de datos
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error en la conexión: " . $conn->connect_error);
+}
+
+// Consulta SQL para obtener la lista de provincias
+$sql = "SELECT idProvincia, Provincia FROM provincias";
+$result = $conn->query($sql);
+?>    
+<?php
     // Inicia la sesión (si aún no está iniciada)
     session_start();
 
@@ -111,13 +129,27 @@
 
             <label for="password2">Confirmar Contraseña:</label>
             <input type="password" id="password2" name="password2" required>
-            
+
             <div>
             <strong style="font-size: 18px; font-weight: bold; text-shadow: 2px 2px 3px rgba(0,0,0,0.5);">Captcha: <?php echo $captcha; ?></strong>
             </div>
 
             <label for="captcha">Por favor, ingresa el captcha:</label>
             <input type="text" id="captcha" name="captcha" required>
+
+            <label for="provincia">Provincia:</label>
+            <select id="provincia" name="provincia">
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo '<option value="' . $row['idProvincia'] . '">' . $row['Provincia'] . '</option>';
+                }
+                ?>
+            </select>
+
+            <div id="provincia_nombre_container" style="display: none;">
+                <label for="provincia_nombre">Provincia Seleccionada:</label>
+                <input type="text" id="provincia_nombre" name="provincia_nombre" disabled>
+            </div>  
 
             <button type="submit">Registrarse</button>
         </form>
@@ -169,7 +201,17 @@
             return regex.test(email);
         }
     </script>
-
+<script>
+    function updateProvinceName() {
+        var select = document.getElementById('provincia');
+        var selectedOption = select.options[select.selectedIndex];
+        var provinciaNombre = selectedOption.text;
+        var provinciaId = selectedOption.value;
+        
+        document.getElementById('provincia_nombre').textContent = provinciaNombre;
+        document.getElementById('provincia_id').value = provinciaId;
+    }
+</script>
 <script>
     if (typeof error !== 'undefined') {
         document.getElementById('mensajeError').textContent = error;
