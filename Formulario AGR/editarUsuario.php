@@ -6,6 +6,8 @@
     <title>Página del Usuario</title>
     <link rel="stylesheet" href="estilos/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="estilos/estilos.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDesJUSEExzoHDeDykc0Ju6y1fEJQdw_U&callback=inicializarMapa" async defer></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -137,6 +139,38 @@
           $apellido2 = $row['Usuario_apellido2'];
   }
 ?>
+<script>
+    function inicializarMapa() {
+        var ubicacion = { lat: 0, lng: 0 }; // Puedes inicializar con coordenadas iniciales o dejar en blanco para usar la geolocalización.
+        var mapa = new google.maps.Map(document.getElementById('mapa'), {
+            zoom: 12,
+            center: ubicacion
+        });
+
+        // Puedes personalizar el marcador del mapa
+        var marcador = new google.maps.Marker({
+            position: ubicacion,
+            map: mapa,
+            title: 'Ubicación Actual'
+        });
+
+        // Usar geolocalización para obtener ubicación actual
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var ubicacion_actual = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                mapa.setCenter(ubicacion_actual);
+                marcador.setPosition(ubicacion_actual);
+            }, function () {
+                // Manejar errores de geolocalización
+            });
+        } else {
+            // El navegador no admite geolocalización
+        }
+    }
+</script>
     <header class="header">
         <div class="container">
             <div class="row align-items-center justify-content-between">
@@ -173,6 +207,12 @@
             </div>
         </div>
     </div>
+    <div class="mb-3">
+        <button class="btn btn-primary btn-block" id="ubicacionBtn">Obtener Ubicación</button>
+        <p id="ubicacionInfo"></p>
+    </div>
+    <div id="mapa" style="width: 100%; height: 400px;"></div>
+
 </main>
 
 </body>
