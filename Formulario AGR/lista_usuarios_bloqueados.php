@@ -42,40 +42,51 @@
 </head>
 <body>
 <!-- LISTA DESPEGABLE PARTE PHP-->  
-<?php
-// Inicializa la variable $registros
-$registros = null;
 
+<?php
+$provincia_seleccionada = $_POST['provincia'];
+echo "Provincia seleccionada: " . $provincia_seleccionada;
+
+$consulta = "SELECT u.Usuario_id, u.Usuario_nombre, u.Usuario_fecha_alta, u.Usuario_email, u.Usuario_perfil, p.Provincia
+           FROM usuarios u
+           INNER JOIN provincias p ON u.Usuario_provincia = p.idProvincia";
+
+if ($provincia_seleccionada !== 'todas') {
+    $consulta .= " WHERE u.Usuario_provincia = '$provincia_seleccionada'";
+}
+echo "Consulta SQL: " . $consulta;
+?>
+
+<?php
 // Establece la conexión a la base de datos
 $conexion = mysqli_connect("localhost", "root", "", "usuario") or die("Problemas con la conexión");
 
+// Verifica si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // El formulario se ha enviado, procesa la selección del filtro
-  // y ejecuta la consulta SQL adecuada
   $filtro = $_POST['filtro'];
+  $provincia_seleccionada = $_POST['provincia'];
 
-  if ($filtro === "bloqueados") {
-    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios WHERE Usuario_bloqueado='1'";
-  } elseif ($filtro === "desbloqueados") {
-    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios WHERE Usuario_bloqueado='0'";
-  } else {
-    $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios";
+  $consulta = "SELECT u.Usuario_id, u.Usuario_nombre, u.Usuario_fecha_alta, u.Usuario_email, u.Usuario_perfil, p.Provincia
+               FROM usuarios u
+               INNER JOIN provincias p ON u.Usuario_provincia = p.idProvincia
+               WHERE 1"; // Inicia con una cláusula WHERE verdadera
+
+  if ($provincia_seleccionada !== 'todas') {
+    $consulta .= " AND u.Usuario_provincia = '$provincia_seleccionada'";
   }
 
-  $result = mysqli_query($conexion, $query) or die("Problemas en el select:" . mysqli_error($conexion));
-
-  // Asigna $result a $registros solo si la consulta tuvo éxito
-  if ($result) {
-    $registros = $result;
+  if ($filtro === 'bloqueados') {
+    $consulta .= " AND u.Usuario_bloqueado = 1";
+  } elseif ($filtro === 'desbloqueados') {
+    $consulta .= " AND u.Usuario_bloqueado = 0";
   }
-}
 
-// Consulta por defecto si no se ha enviado el formulario
-if ($registros === null) {
-  $query = "SELECT Usuario_id, Usuario_nombre, Usuario_fecha_alta, Usuario_email, Usuario_perfil FROM usuarios";
-  $registros = mysqli_query($conexion, $query) or die("Problemas en el select:" . mysqli_error($conexion));
+  $consulta .= " ORDER BY p.Provincia";
+
+  $registros = mysqli_query($conexion, $consulta) or die("Problemas en el select:" . mysqli_error($conexion));
 }
 ?>
+
 
 <form method="POST" action="lista_usuarios_bloqueados.php">
   <label for="filtro">Filtrar por:</label>
@@ -84,7 +95,18 @@ if ($registros === null) {
     <option value="bloqueados">Bloqueados</option>
     <option value="desbloqueados">Desbloqueados</option>
   </select>
-  <input type="text" name="valor_filtro" placeholder="Valor de filtro">
+  <select name="provincia" id="provincia">
+    <option value="todas">Todas las provincias</option>
+    <?php
+    // Consulta para obtener todas las provincias registradas en la BBDD y ordenar alfabéticamente por nombre de provincia
+    $provincia_query = "SELECT DISTINCT Usuario_provincia, Provincia FROM usuarios INNER JOIN provincias ON usuarios.Usuario_provincia = provincias.idProvincia ORDER BY Provincia";
+    $provincias_result = mysqli_query($conexion, $provincia_query) or die("Problemas en la consulta:" . mysqli_error($conexion));
+
+    while ($provincia = mysqli_fetch_array($provincias_result)) {
+      echo '<option value="' . $provincia['Usuario_provincia'] . '">' . $provincia['Provincia'] . '</option>';
+    }
+    ?>
+  </select>
   <input type="submit" value="Filtrar">
 </form>
   
@@ -98,17 +120,23 @@ if ($registros === null) {
         <th>Nombre</th>
         <th>Fecha de Alta</th>
         <th>Correo</th>
+        <th>Provincia</th>
         <th>Rol</th>
         <th>Accionar</th>
       </tr>
     </thead>
     <tbody>
-      <?php while ($reg = mysqli_fetch_array($registros)) { ?>
+      <?php 
+
+    $registros = mysqli_query($conexion, $consulta) or die("Problemas en el select:" . mysqli_error($conexion));
+
+    while ($reg = mysqli_fetch_array($registros)) { ?>
         <tr>
           <td><?php echo $reg['Usuario_id']; ?></td>
           <td><?php echo $reg['Usuario_nombre']; ?></td>
           <td><?php echo $reg['Usuario_fecha_alta']; ?></td>
           <td><?php echo $reg['Usuario_email']; ?></td>
+          <td><?php echo $reg['Provincia']; ?></td>
           <td><?php echo $reg['Usuario_perfil']; ?></td>
           <!-- Agrega un campo oculto para cada ID de usuario -->
           <td><input type="checkbox" name="usuarios_Estado[]" value="<?php echo $reg['Usuario_id']; ?>"></td> 
