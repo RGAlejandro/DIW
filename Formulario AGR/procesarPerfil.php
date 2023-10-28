@@ -17,10 +17,9 @@ $busqueda = mysqli_query($conexion, "SELECT * FROM usuarios WHERE Usuario_email=
 if (mysqli_num_rows($busqueda) != 0) {
     $row = mysqli_fetch_assoc($busqueda);
     $foto = base64_encode($row['Usuario_fotografia']);
-    $nombre = $row['Usuario_nombre'];
-    $apellido1 = $row['Usuario_apellido1'];
-    $apellido2 = $row['Usuario_apellido2'];
-    $idProvincia = $row['Usuario_provincia'];
+    $nuevaProvincia = $_POST["provincia"];
+    $nuevoApellido1 = $_POST["apellido1"];
+    $nuevoApellido2 = $_POST["apellido2"];
 }
 
 $nombreError = '';
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: menu.php');
     } else {
         // Aquí puedes realizar la actualización en la base de datos
-        $updateQuery = "UPDATE usuarios SET Usuario_nombre='$nombre', Usuario_provincia='$nuevaProvincia', Usuario_apellido1='$apellido1', Usuario_apellido2='$apellido2' WHERE Usuario_email='$email'" or die("Problemas en la actualización: " . mysqli_error($conexion));
+        $updateQuery = "UPDATE usuarios SET Usuario_nombre='$nuevoNombre', Usuario_provincia='$nuevaProvincia', Usuario_apellido1='$nuevoApellido1', Usuario_apellido2='$nuevoApellido2' WHERE Usuario_email='$email'" or die("Problemas en la actualización: " . mysqli_error($conexion));
         
         if (mysqli_query($conexion, $updateQuery)) {
             // La actualización se realizó correctamente
