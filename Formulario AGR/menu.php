@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Página con Inicio de Sesión y Registro</title>
     <style>
         body {
@@ -111,7 +112,7 @@
         <a href="#">Inicio</a>
         <a href="#">Acerca de</a>
         <a href="#">Servicios</a>
-        <a href="#">Contacto</a>
+        <a href="#" onclick="toggleContactPopup()">Contacto</a>
     </div>
     <button class="login-button" onclick="toggleLoginPopup()">Iniciar Sesión</button>
     
@@ -140,6 +141,23 @@
             </div>
         </div>
     </div>
+
+    <div class="contact-popup-container" id="contactPopupContainer" style="display: none;">
+    <div class="contact-popup container" id="contactPopup">
+        <h2 class="mb-3">Contacto</h2>
+        <form id="contactForm" action="contacto.php" method="POST">
+            <div class="form-group">
+                <label for="contactEmail">Correo Electrónico</label>
+                <input type="text" class="form-control" id="contactEmail" name="contactEmail" placeholder="Correo Electrónico" required>
+            </div>
+            <div class="form-group">
+                <label for="incidencia">Descripción de la incidencia</label>
+                <textarea class="form-control" id="incidencia" name="incidencia" placeholder="Descripción de la incidencia" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+    </div>
     <script>
         function toggleLoginPopup() {
             var popup = document.getElementById("loginPopup");
@@ -152,5 +170,30 @@
             }
         }
     </script>
+    <script>
+    function toggleContactPopup() {
+        var contactPopup = document.getElementById("contactPopup");
+        var contactPopupContainer = document.getElementById("contactPopupContainer");
+        
+        var loginPopup = document.getElementById("loginPopup");
+        var loginPopupContainer = document.getElementById("loginPopupContainer");
+        
+        // Oculta el formulario de inicio de sesión si está abierto
+        if (loginPopup.style.display === "block") {
+            loginPopup.style.display = "none";
+            loginPopupContainer.style.display = "none";
+        }
+        
+        // Muestra/oculta el formulario de contacto
+        if (contactPopup.style.display === "block") {
+            contactPopup.style.display = "none";
+            contactPopupContainer.style.display = "none";
+        } else {
+            contactPopup.style.display = "block";
+            contactPopupContainer.style.display = "block";
+        }
+    }
+</script>
+
 </body>
 </html>
