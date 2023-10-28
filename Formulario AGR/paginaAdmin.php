@@ -94,8 +94,9 @@
         <a href="#">Inicio</a>
         <a href="#">Acerca de</a>
         <a href="#">Servicios</a>
-        <a href="#">Contacto</a>
+        <a href="atender_incidencias.php">Atender Contactos</a>
         <a href="lista_usuarios_bloqueados.php">Lista de Usuarios Bloqueados</a>
+        
 
     </div>
     <?php

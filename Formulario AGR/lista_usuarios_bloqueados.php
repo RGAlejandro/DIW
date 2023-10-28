@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Lista de Alumnos</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -149,7 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input style="font-size: 16px; background-color: #4CAF50; color: white; border: none; padding: 10px 20px; cursor: pointer;" type="button" value="Seleccionar Todos" onclick="selectAll()">
         <input style="font-size: 16px; background-color: #4CAF50; color: white; border: none; padding: 10px 20px; cursor: pointer;" type="submit" value="Desbloquear Usuarios">
   </div>
-  
+  <p><a class="btn btn-secondary" href="paginaAdmin.php">Volver al Menú Principal</a></p>
+
 </form>
   
 <script>
