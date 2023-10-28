@@ -9,8 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conexion = mysqli_connect("localhost", "root", "", "usuario");
 
     // Verifica si el correo del usuario existe
-    $consulta = "SELECT * FROM usuarios WHERE correo = '$correoUsuario'";
+    $consulta = "SELECT * FROM usuarios WHERE Usuario_email = '$correoUsuario'";
     $resultado = mysqli_query($conexion, $consulta);
+    
+    if (!$resultado) {
+        die("Error en la consulta: " . mysqli_error($conexion));
+    }
 
     if (mysqli_num_rows($resultado) == 1) {
         // El correo existe, procede a insertar la incidencia
@@ -26,9 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // El correo no existe en la base de datos de usuarios
         echo "El correo proporcionado no existe en la base de datos.";
+
+        header("refresh:2;url=menu.php");
+        exit();
     }
 
     // Cierra la conexión a la base de datos
     mysqli_close($conexion);
 }
-?>
+?> 
